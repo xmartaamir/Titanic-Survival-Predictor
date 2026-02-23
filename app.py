@@ -1,32 +1,38 @@
 import streamlit as st
 import joblib
-import numpy as np
-import sklearn
+import pandas as pd
 
-# Model load karo
-model = joblib.load('titanic_model.pkl')
+# Navigation Sidebar
+st.sidebar.title("ML Portfolio 🚀")
+choice = st.sidebar.radio("Project Select Karein:", ["Titanic Survival", "Sentiment Analysis"])
 
-st.title("🚢 Titanic Survival Predictor")
-st.write("AI se check karein ke kya aap Titanic par bach paate?")
+# --- TITANIC SECTION ---
+if choice == "Titanic Survival":
+    st.title("🚢 Titanic Survival Predictor")
+    # Yahan apna purana Titanic wala logic (inputs aur prediction) paste kar dein
+    st.info("Passenger details enter karein taake survival predict kiya ja sakay.")
 
-# User se input lena
-pclass = st.selectbox("Ticket Class (1=Ameer, 3=Ghareeb)", [1, 2, 3])
-sex = st.radio("Gender", ["Male", "Female"])
-age = st.slider("Aapki Umar", 1, 100, 25)
-family = st.number_input("Family members (Sath kitne thay?)", 0, 10)
-title = st.selectbox("Title", ["Mr", "Miss", "Mrs", "Master", "Rare"])
+# --- SENTIMENT SECTION ---
+elif choice == "Sentiment Analysis":
+    st.title("🤖 AI Sentiment Analyzer")
+    st.write("Amazon Reviews par train kiya gaya model.")
 
-# Data ko numbers mein badalna (Encoding)
-sex_num = 0 if sex == "Male" else 1
-title_map = {"Mr": 1, "Miss": 2, "Mrs": 3, "Master": 4, "Rare": 5}
-title_num = title_map[title]
+    # Load NLP Model & Vectorizer
+    model = joblib.load('sentiment_model.pkl')
+    vectorizer = joblib.load('tfidf_vectorizer.pkl')
 
-# Prediction Button
-if st.button("Predict"):
-    features = np.array([[pclass, sex_num, age, family, title_num]])
-    prediction = model.predict(features)
-    
-    if prediction[0] == 1:
-        st.success("Mubarak ho! AI kehta hai aap BACH JAYENGE! 🎉")
-    else:
-        st.error("Afsos! AI kehta hai aap NAHI BACH PAYENGE. 💔")
+    user_text = st.text_area("Review likhein (e.g. 'I love this product'):")
+
+    if st.button("Analyze"):
+        if user_text:
+            # Transformation
+            data = vectorizer.transform([user_text])
+            prediction = model.predict(data)
+            
+            # Result Display
+            if prediction[0] == 1:
+                st.success("Positive Review! 😊")
+            else:
+                st.error("Negative Review! ☹️")
+        else:
+            st.warning("Pehle kuch text likhein!")

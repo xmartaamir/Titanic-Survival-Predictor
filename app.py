@@ -37,34 +37,29 @@ if choice == "Titanic Survival":
             st.error(f"Error loading Titanic model: {e}")
 
 # --- SENTIMENT SECTION ---
+
+     # --- SENTIMENT SECTION ---
 elif choice == "Sentiment Analysis":
     st.title("🤖 AI Sentiment Analyzer")
-    st.write("Amazon Reviews par train kiya gaya model.")
-
-    # Load NLP Model & Vectorizer
+    
+    # 1. PEHLE LOAD KARO (Don't put this inside the button)
     try:
         model = joblib.load('sentiment_model.pkl')
         vectorizer = joblib.load('tfidf_vectorizer.pkl')
     except Exception as e:
-        st.error(f"Error loading NLP files: {e}")
+        st.error(f"Files load nahi ho sakein: {e}")
 
-    user_text = st.text_area("Review likhein (e.g. 'The product quality is very bad'):")
+    user_text = st.text_area("Review likhein:")
 
     if st.button("Analyze"):
         if user_text:
-            # Preprocessing: Clean text jaisa training mein kiya tha
+            # 2. AB USE KARO (Ab NameError nahi aayega)
             clean_text = user_text.lower()
-            clean_text = re.sub(r'[^\w\s]', '', clean_text)
-            
-            # Transformation & Prediction
             data = vectorizer.transform([clean_text])
             prediction = model.predict(data)
             
-            # Result Display
-          # --- SENTIMENT LOGIC FIX ---
-            if prediction[0] == 0:  # Agar model 0 de raha hai toh wo Positive hai
+            if prediction[0] == 1:
                 st.success("Positive Review! 😊")
             else:
                 st.error("Negative Review! ☹️")
-      
 

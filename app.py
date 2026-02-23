@@ -61,9 +61,10 @@ elif choice == "Sentiment Analysis":
             prediction = model.predict(data)
             
             # Result Display
-            if prediction[0] == 1:
-                st.success("Positive Review! 😊 (Khushi ka izhaar)")
+          # --- SENTIMENT LOGIC FIX ---
+            if prediction[0] == 0:  # Agar model 0 de raha hai toh wo Positive hai
+                st.success("Positive Review! 😊")
             else:
-                st.error("Negative Review! ☹️ (Shikayat ya narazgi)")
-        else:
-            st.warning("Pehle kuch text likhein!")
+                st.error("Negative Review! ☹️")
+      
+

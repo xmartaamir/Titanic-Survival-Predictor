@@ -1,3 +1,4 @@
+![Python](https://img.shields.io/badge/Python-3.13-blue) ![Streamlit](https://img.shields.io/badge/Streamlit-Live-red)
 # 🚀 AI/ML Portfolio: Dual Prediction Dashboard
 
 Is project mein maine do mukhtalif Machine Learning models ko aik hi interface par deploy kiya hai.
